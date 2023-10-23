@@ -1,0 +1,249 @@
+Securely Assessing Your System 
+
+* Generating and Exchanging SSH Keys For Secure Access 
+
+
+
+Writing Your own Service File
+* When working with systemd services and you install and application inputs the service file in ll/usr/libsystemd/system 
+* When creating your own service file do not put them in that directory because it is managed by systemd. Because if a new application was installed, your work will be overwritten.
+* Install your own service files on cd/etc/systemd/system. Files in here have higher priority.
+* To make a service mkdir
+* vim names a file 
+
+Networking
+
+Working With NFTables
+* To look at available systems on your device nmcli -p device or nmcli c s or nmcli con
+* If you’re wanting to get a lot of information about the connection nmcli con s id “System eth0” . To edit those settings nmcli con e id System\ eth0
+* Type print to view the information again
+* describe connection.id gives information of the different property associated and configured for this connection. 
+* cd / etc/sysconfig/network-scripts/  is where network configuration is done. You can make changes to the config file using cat ifcfg-eth0 as long as you have nmcli connection reload. If you don’t run that command network manager won’t pick up that change until you reboot. 
+* nmtui is a tui version of the network manager gui interface. This allows you to change everything on the command lines. You can set your host name and clone a MAC address etc. 
+
+Nftables
+* Iptables ran the firewall. 
+* Nftables has replaced iptables
+* Nftables is the new backend for firewallD. 
+
+What Is Cockpit
+* A web based remote management console that can manage many severs from one interface, including the ability to open a terminal if needed. Cockpit can also manage containers if cockpit-podman is installed. 
+* You are able to create users
+
+Yum Modules
+* Is a new feature that allows users to selectively install different versions of software than what would normally be installed. For example, if you require PostgreSQL 9.6 but notice yum install postgresql will try to install 10.6, using yum module. It is a solution you can use to move forward, rather than Manually compiling packages. 
+
+Securely Accessing Your System 
+- Generating and Exchanging SSH Keys for Secure Access
+* Understanding the creation and exchange of SSH keys is a key concept to grasp as a new system administrator. In this lab, we will generate keys on two systems using the ssh-keygen utility and learn how to exchange and verify the keys with a remote system using ssh-copy-id and associated key files on each. At the end of this lab, you will understand how to create secure keys for remote access, how to exchange them, and where to store them on each system involved in the chain.
+* To generate new ssh keys ssh-keygen
+* cd .ssh to check the directory 
+* cat id_rsa(public key name).pub to view public key.  Copy the ssh key onto a clipboard. Then login to server 2
+* Sudo yum install nano then run command nano authorized_keys. Paste key on next page after running the nano authorized_keys command 
+
+Working with Files in CentOS
+* To view the cpu information:               cat /proc/cpuinfo 
+
+Understanding Privilege Escalation in CentOS
+* “ i “ to insert a text
+
+Working with Vim in CentOS 
+* :! date to locate and add date 
+
+
+Create and use an SSH Tunnel for Network traffic 
+* Port forwarding via SSH (SSH tunneling) creates a secure connection between your server and a remote machine through which any number of services can be relayed. One reason this can be useful is that you can pass traffic that uses an unencrypted protocol (e.g., IMAP, VNC) over an encrypted network stream to increase security.
+* Generate an ssh key using ssh-keygen 
+* ssh-copy-id cloud_user@10.0.1.100
+* To create an ssh tunnel you would use command:                                             ssh -f cloud_user@10.0.1.100(private ip) -L 2000(local port):10.0.1.100:80(remote port) -N(so you don’t do anything on the other system)
+* Command: curl localhost:2000 shows that the web pages worked meaning that we are hitting our local “2000” port that’s being tunneled over to port 80 on the other server. 
+
+Creating Your Own Service File with Network Requirements in CentOS 
+* To look at network files ls /usr/lib/system/network* 
+* To write a custom service cd /etc/systems/system then add the custom file with command vim custom.services
+
+Using Cockpit in CentOS 
+* Used to set up a new server in environment. 
+* Start a container so new contains can use it for remote locking
+* Elevate to sudo sudo -i 
+* Install cockpit yum install cockpit -y
+* Start the services for cockpit with command Systemctl start cockpit
+
+Working with yum module on CentOS 
+* Using yum module allows much greater flexibility in determining what software can be installed on your servers. It allows you to leave security and bug fix patches up to the CentOS team instead of having to manually compile or build your own RPMs, even for packages that may be out of date.
+* Elevate to root sudo -i 
+* Yum module list to verify if your packages are on list. 
+
+
+- LPI Linux Learning Essentials 
+
+1.1 Linux Evolution and popular Operating Systems
+
+Linux Distributions
+* A Distribution is a collection of components that forms a system. It is comprised of a Linux Kernel, GNUU Core, Graphical Interface (optional), x server(optional). 
+* To check the release lb_release -a
+* Linux Kernel is the framework that connects the application layer to the hardware of the computer. The foundation of the operating system.  
+* To check version of kernel uname -r
+* GNU Core Utilities are basic fine, shell, and text manipulation. Utilities of the GNU operating system. This is the foundational utilities expected to exist on every operating system. Examples include: set and change file permission, and ownership, concatenating and write files, exit status, and listing directories and files. Basic operating system commands that enable us to use Linux in an interactive manner. 
+* ls - list directories one of the GNU utilities. 
+* ls —version for version of GNU utilities. 
+* X server is the display server for X windows system. A framework for the GUI environment. It is an architecture agnostic framework for remote graphical user interface and input devices. The X server itself was designed to be used over the network connections. 
+* To view version of X server you must elevate to sudo command sudo x -version. 
+* Graphical Interface often referred to as the desktop environment. Common Linux desktops include Gnome, KDE, Unity, Cinnamon, MATE, and Xfce though there are many others. This is the environment the permits you to navigate operating systems using a mouse and folders. 
+
+
+Linux Embedded Systems
+* Embedded system is a combination of hardware and software for a purpose. 
+
+Linux In The Clouds
+* The Cloud is software and services that run and are available on the internet. A collection of data centers providing computer, application, and storage services over the internet. There are many cloud providers, and each may use a different terminology for the layers of infrastructural components that comprise their respective cloud offerings. When using AWS you’ll use such terms as Regions, Availability zones, and Subnets. This is a high level abstraction of the complicated system of systems that enabled the cloud to function as a reliable service. 
+* Regions - as the cloud is hosted in various locations around the world, each of these locations is comprised of a Region. A Region in turn, is a collection of regional data centers. Typically, each Region is independent of other Regions. Having data stored in regions around the world permits the shortest physical path between regional fault tolerance and stability. This is where fault tolerance comes into place, if you have a failure in one place you can move the service to another place. Example: if you live on the west coast a data would be stored in that region to access the data on the west coast. If that region fails you will still be able to access the data by routing it to another region. A continent or part of a continent. 
+* Availability Zones - House within regions are Availability zones. These are the data centers that comprise a Region. Whilst isolated, Availability zones  are typically connected to each other through low-latency connections.  This provides more of a more local level of fault tolerance and stability as data may be stored in multiple data center locations within the region itself. 
+* Subnet - The Subnet is the local network instance for the compute resource in the cloud. There may be multiple compute instances, or virtual servers existing within a subnet, replicated into additional Availability zones in additional regions. This is often accompanied by automation mechanisms to create and manager selfie-healing infrastructure. Linux provides 90% of the public cloud workload. The local network for things running in the cloud. They may not be connected to the internet itself depending on what their purpose is.  
+* Using the Command Line: 
+- whoami - tells you who you are in Linux 
+- pwd (print working directory) - shows you what directory you’re in, example:  /home/cloud_user
+- last - shows you the last person to login. Also shows the last time the system rebooted. 
+- Uptime -Shows how long the server has been up, how many users logged in, and load average that shows the load the system is under. 
+- Clear - clears screen 
+- man - use “man” in front of the command you’re using to specify the parameters.  Running the Man command with parameters after opens the “Man” page which is the documentation of the command. Example: man whoami
+- man ls - list multiple commands pertaining to the directory. 
+- q - to exit page and go back to main screen. 
+- “-“ is called a tack. Example: -a
+- ls -a - allows you to see the hidden dot files. Example: .bash_logout , .bashrc 
+
+1.2 Major Open-Source Applications
+Desktop Applications 
+* Desktop - Open-source applications for desktop and office use. Applications: Open Office, Libre, Firefox, mail client, GIMP image editor. 
+
+Server Applications
+* Server is open-source applications that provides client services. 
+
+Development Languages 
+* Development open-source languages for application development. 
+* Shell a script designed to be run by the command line interpreter using various scripting languages. Shell scripts are often used to automate strings of commands with some manner of logic applied. Bash is the most common Shell used in Linux. It typically runs as a command processor in a text-based command line interface. The ability to read and execute commands from a file is what gives a shell the ability to be used for automated tasks. 
+* cd - Change Directory
+* ~/(folder name) touch newfile to add a file that’ll create an empty blank file. Example:  ~/Desktop touch newfile
+* cd (name of folder)/  to pull up folder example: cd Desktop/
+* ~/(folder name) for i in {1..100}; do touch newfile_$i; done to add files into specified folder. Example:                     ~/Desktop for i in {1..100}; do touch newfile_$i; done
+* ~/(folder name) rm -i newfile* to remove files created. Example:                           ~/Desktop rm -i newfile
+
+Package Management Tools and Repositories 
+* Package A collection of files needed to install an application. 
+* Pack at Management how installation packages are tracked and managed. 
+* Repositories are directories containing software packages and an index. 
+* yum Yellowdog Updated, Modified
+
+Installing an RPM Package
+* -i means install
+* ls to check rpm
+* To install rpm use sudo command. Example: sudo rpm -i htop (click tab button)
+* htop to check the utility and looking at processes. 
+* To remove htop installation. Example: sudo rpm -e htop (type htop in command line to confirm that there is no such file or directory). 
+
+Installing an DEB Package
+* cat /etc/issue to check the host and version of software running. 
+* To install a DEB sudo dpkg -i htop (click tab button)
+* 
+* To remove htop installation. Example: sudo dpkg —remove htop (type htop in command line to confirm that there is no such file or directory). 
+
+Compiling from Source
+* cat /etc/redhat-release to view version of red hat software. 
+* pwd to check your working directory.
+* To extract the source Example:           tar xzf htop (click tab button).  Type ls to view new folder created
+* To hop into folder created. Example:   cd htop (click tab button) 
+* To configure a file type command ls, then verify the config file is present. Used command to run configure script:  ./configure 
+* To compile the source code use command make 
+* To install the binaries you’ll need elevated permission. sudo make install
+* To remove htop run command cd htop (click tab button), enter, Run command sudo make uninstall 
+
+
+1.3 Open-Source Software and Licensing
+
+The Open Source Philosophy 
+* The basic premise of open-source software is that the source code is available for anyone to freely view, use, modify or redistribute. 
+* Forking occurs when software developers use the source code from one project, to start an entirely new parallel project. 
+* Permissive Licensing no restrictions on licensing derivative work. No restrictions are in place to guarantee how the code would be used, modified, or even sold.  MIT Licenses are common and popular. 
+* Copyleft Licensing Derivative work must use the same license as the original software. 
+
+Open Source Licensing 
+* Open-source licensing provides rules and guidelines for how the work may be used, permitting others to contribute without first seeking permission. 
+* Licensing examples Public Domain, Permissive Licensing, Copyleft Licensing
+* Public Domain you can copy, modify, distribute, and perform the work even for commercial purposes without permission. The public domain is free for use.  CCO 1.0 License
+* BSD Licenses are a segment of permissive software licenses, with minimal restrictions imposed on usage and distribution. BSD Licenses typically contain 4 or fewer of the following clauses: source code, binary, advertising, acknowledgement, may be used to endorse, promote. 
+* GPL or the GNU General public license, is a widely used copyleft software license. Being a copyleft license, derivative work may only be distributed under the same license terms. 
+- BSD License Permits:
+    - Commercial use
+    - Modification 
+    - Distribution
+- Restricts: 
+    - Sub licensing
+- And Must: 
+    - Include the original work 
+    - Stated changes
+
+Open Source Licensing The Free Software Foundation (FSF) and Open Source Initiative (OSI)
+* The open source initiative and the free software foundation are two movements that place approvals on open-source software licenses. 
+* FOSS vs FLOSS the difference between FOSS and FLOSS is largely philosophical. The practical difference is that FLOSS implied slightly more restrictions in terms of monetization. In terms of semantically differences:
+    - FOSS Free and Open Source software, the word free is generally regarded in the context of price. 
+    - FLOSS Free/Libre/Open Source Software, the word free is a reference to freedom, and this designation attempts to the make the meaning more clear. 
+* If you want to be neutral between free software and open source and clear about them, the way to achieve that is using FLOSS not FOSS. 
+
+1.4 ICT Skills and Working in Linux
+
+Desktop Skills
+* Desktop Skills using the desktop, config options, web usage, and privacy. 
+* ls /home/  is the home directory for the user.  Folders will be displayed once the command has been ran. 
+* Root user is the administrator on the system. 
+* SUDO (Super User Do)
+
+Getting to the Command Line
+* When using Linux as a server environment, often the only interface to the system is the command line. 
+
+
+Industry Uses of Linux, Cloud Computing, and Virtualization 
+* Industry Uses of Linux is how Linux is used in virtualization and cloud computing. 
+* Virtualization & Cloud Computing have changed the shape of modern compute workloads, and Linux has been at the forefront of this digital transformation. 
+* The Cloud is software and services that run and are available on the internet. The cloud is a collection of data centers providing compute, application, and storage services over the internet. 
+- The cloud
+- Region
+- Availability zone
+- Subnet 
+- AWS ec2 instance 
+* cat /etc/*release to see release files which tells you the distribution and version. 
+* cat /etc/*issue use command if there wan not a release file. Once the command is ran it’ll tell you the distribution version (example unbuntu 18.04.2 LTS \n \l). 
+* lsb_release -a command shows everything. 
+* hostnamectl this command shows the version of the distribution. only works on system d based Linux distributions. 
+
+2.1 Command Line Basics
+
+Basic shell
+* How the shell interprets commands for transition and execution. The standard Linux shell (BASH) is both a command line interpreter and a programming language. 
+* BASH Bourne Again Shell 
+* Command Prompt is a short text string at the beginning of the command line. Linux command prompts typically show the current user, the current host, and the correct working directory.  The command prompt is easily modified to show more or less information as desired. The dollar sign ($) at the end of the prompt string denotes that the current user is unprivileged, and that the interface is ready to receive input. The input is sent to the interpreter to be parsed and executed. BASH, or the Bourne Again Shell, is the most common interpreter, however, there are others available, some of which did not use the dollar sign.  
+* “~” called a Tilda and represents the home directory. 
+* Commands these are entered as text after the command line prompt are parsed by the interpreter, and executed by the shell as a process.  Commands are entered as text into the input stream known as Standard In (STDIN) . These commands adhere to a syntax as defined by the interpreter or current shell. The commands entered may be as simple as invoking a single application or utility; or as complex as redirecting the output from one utility to another, while iterating through a logical loop. The ability to redirect output, as well as apply logic, to a large number of useful GNU utilities and applications makes the command line a powerful tool for the system administration and automation. 
+* Command Output The output of the entered commands is displayed on the line following the command itself. Commands are sent for execution by using  [ Enter ].  This output will be sent to one of the two streams:  Standard Out (STDOUT) , or Standard Error (STDERR). Both streams will print to the screen by default, however, the output may be changed with redirection or a pipeline. 
+
+
+Command Line Syntax
+* Basic command line syntax and notification. As the shell input is read, it follows a sequence of operations ignoring comments ( and divvying the input into words and operations. 
+
+Variables
+* Using variables to store values for easy reference. A BASH variable may contain a number, a character, or a string of characters. These variables do not need to be declared nor are there data types. They are simply assigned. 
+- Example of setting a variable in the command line: var1 = “Some Value”.
+- To reference that variable you have to use a dollar sign. Example of command: echo $var1 this will return. 
+* Bourne Shell Variables
+- $HOME
+- $PS1
+- $PATH
+
+Quoting
+* Preserving input that contains special characters or spaces. Quoting is used to disable special treatment of certain characters and words as well as to prevent parameter expansion and preserve what is quoted. 
+* Methods
+- Escape Character a non-quotes backslash \ is the bash escape character and preserves the literal value of the next following character with the single exception of newline. 
+- Single Quotes preserve the literal value of every character contained within the quotes, including the escape character. 
+- Double Quotes preserve the literal value of most characters contained within the quotes, exceptions include $ (for variables) , “ (for single quoting), \ (for escaping a character). 
+
+2.2 Using the Command Line to agent Help
+* Man Pages
